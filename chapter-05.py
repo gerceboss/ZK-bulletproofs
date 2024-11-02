@@ -45,7 +45,7 @@ def commit(a, sL, b, sR, alpha, beta, gamma, tau_1, tau_2):
 
 
 def evaluate(f_0, f_1, f_2, u):
-    return (f_0 + f_1 * u + f_2 * u**2)%p
+    return (f_0 + f_1 * u + f_2 * u**2) % p
 
 def prove(blinding_0, blinding_1, blinding_2, u):
     return (blinding_0 + blinding_1 * u + blinding_2 * u**2)%p
@@ -82,5 +82,5 @@ pi_t = prove(gamma, tau_1, tau_2, u)
 
 ## step 4: Verifier accepts or rejects
 assert t_u == np.mod(np.inner(np.array(l_u), np.array(r_u)), p), "tu !=〈lu, ru〉"
-assert eq(add(A, commit(S, u)), add_points(vector_commit(G, l_u), vector_commit(H, r_u), multiply(B, pi_lr))), "l_u or r_u not evaluated correctly"
+assert eq(add(A, multiply(S, u)), add_points(vector_commit(G, l_u), vector_commit(H, r_u), multiply(B, pi_lr))), "l_u or r_u not evaluated correctly"
 assert eq(add(multiply(G, t_u), multiply(B, pi_t)), add_points(V, multiply(T1, u), multiply(T2, u**2 % p))), "t_u not evaluated correctly"
