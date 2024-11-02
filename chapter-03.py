@@ -16,39 +16,38 @@ B = (FQ(128486065350455871287888893172307515183924786911123755697753900951123306
 # remember to do all arithmetic modulo p
 
 def commit(f_0, f_1, f_2, gamma_0, gamma_1, gamma_2, G, B):
-    # fill this in
-    # return the commitments as a tuple (C0, C1, C2)
-    pass
+    C0=add(multiply(G,f_0),multiply(B,gamma_0))
+    C1=add(multiply(G,f_1),multiply(B,gamma_1))
+    C2=add(multiply(G,f_2),multiply(B,gamma_2))
+    return (C0,C1,C2)
 
 def evaluate(f_0, f_1, f_2, u):
     return (f_0 + f_1 * u + f_2 * u**2) % p
 
 def prove(gamma_0, gamma_1, gamma_2, u):
-    # fill this in
-    # return pi
-    pass
+    return (gamma_0 + gamma_1 * u + gamma_2 * u**2) % p
 
 def verify(C0, C1, C2, G, B, f_u, pi):
-    # fill this in
-    # Return true or false
-    pass
+    rhs=add(multiply(G,f_u) ,multiply(B,pi))
+    lhs= add(multiply(C0,1),(add (multiply(C1,u),multiply(C2,u**2))) )
+    return lhs==rhs
 
 ## step 0: Prover and verifier agree on G and B
 
 ## step 1: Prover creates the commitments
 ### f(x) = f_0 + f_1x + f_2x^2
-f_0 = ...
-f_1 = ...
-f_2 = ...
+f_0 = 1
+f_1 = 3
+f_2 = 10
 
 ### blinding terms
-gamma_0 = ...
-gamma_1 = ...
-gamma_2 = ...
+gamma_0 = 6
+gamma_1 = 22
+gamma_2 = 103
 C0, C1, C2 = commit(f_0, f_1, f_2, gamma_0, gamma_1, gamma_2, G, B)
 
 ## step 2: Verifier picks u
-u = ...
+u = 9
 
 ## step 3: Prover evaluates f(u) and pi
 
