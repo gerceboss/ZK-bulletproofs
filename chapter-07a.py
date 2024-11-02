@@ -23,15 +23,40 @@ G_vec = [(FQ(6286155310766333871795042970372566906087502116590250812133967451320
 
 # return a folded vector of length n/2 for scalars
 def fold(scalar_vec, u):
-    pass
+    n = len(scalar_vec)
+    assert n % 2 == 0, "Length of scalar_vec must be even to fold" # If not pad zeroes
+    folded_vec = []
+    for i in range(0,n,2):
+        u_inv = pow(u, -1, p)
+        folded_ele=scalar_vec[i]*u +  scalar_vec[i+1]*u_inv
+        folded_vec.append(folded_ele%p)
+    return folded_vec
 
 # return a folded vector of length n/2 for points
 def fold_points(point_vec, u):
-    pass
+    n = len(point_vec)
+    assert n % 2 == 0, "Length of scalar_vec must be even to fold" # If not pad zeroes
+    folded_vec = []
+    for i in range(0,n,2):
+        u_inv = pow(u, -1, p)
+        folded_ele=add(multiply(point_vec[i],u), multiply(point_vec[i+1],u_inv))
+        folded_vec.append(folded_ele)
+    return folded_vec
 
 # return (L, R)
 def compute_secondary_diagonal(G_vec, a):
-    pass
+    # a1 G2 +a3 G4=L
+    # a2 G1+ a4 G3=R
+    assert len(G_vec)==len(a),"Unequal length of G_vec & a"
+    n=len(a)
+    if n==4:
+        L=add(multiply(G_vec[1],a[0]),multiply(G_vec[3],a[2]))
+        R=add(multiply(G_vec[0],a[1]),multiply(G_vec[2],a[3]))
+    else:
+        L=multiply(G_vec[1],a[0])
+        R=multiply(G_vec[0],a[1])
+
+    return (L,R)
 
 a = [4,2,42,420]
 
