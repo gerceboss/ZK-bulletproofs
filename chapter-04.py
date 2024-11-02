@@ -18,42 +18,44 @@ def addd(A, B, C):
 
 # scalar multiplication example: multiply(G, 42)
 # EC addition example: add(multiply(G, 42), multiply(G, 100))
-
+# typos in this chapter
 # remember to do all arithmetic modulo p
 def commit(a, sL, b, sR, alpha, beta, gamma, tau_1, tau_2):
-    pass
-    # return (A, S, V, T1, T2)
+    A=addd(multiply(G,a),multiply(H,b),multiply(B,alpha))
+    S=addd(multiply(G,sL),multiply(H,sR),multiply(B,beta))
+    V=add(multiply(G,a*b),multiply(B,gamma))
+    T1=add(multiply(G,a*sR + b*sL),multiply(B,tau_1))
+    T2=add(multiply(G,sR*sL),multiply(B,tau_2))
+    return (A, S, V, T1, T2)
 
 
 def evaluate(f_0, f_1, f_2, u):
     return (f_0 + f_1 * u + f_2 * u**2) % p
 
 def prove(blinding_0, blinding_1, blinding_2, u):
-    # fill this in
-    # return pi
-    pass
+    return (blinding_0 + blinding_1 * u + blinding_2 * u**2) % p
 
 ## step 0: Prover and verifier agree on G and B
 
 ## step 1: Prover creates the commitments
-a = ...
-b = ...
-sL = ...
-sR = ...
-t1 = ...
-t2 = ...
+a = 2
+b = 5
+sL = 11
+sR = 19
+t1 = a*sR + b*sL
+t2 = sL*sR
 
 ### blinding terms
-alpha = ...
-beta = ...
-gamma = ...
-tau_1 = ...
-tau_2 = ...
+alpha = 20
+beta = 23
+gamma = 61
+tau_1 = 173
+tau_2 = 960
 
 A, S, V, T1, T2 = commit(a, sL, b, sR, alpha, beta, gamma, tau_1, tau_2)
 
 ## step 2: Verifier picks u
-u = ...
+u = 7
 
 ## step 3: Prover evaluates l(u), r(u), t(u) and creates evaluation proofs
 l_u = evaluate(a, sL, 0, u)
