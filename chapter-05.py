@@ -36,17 +36,19 @@ B = (FQ(128486065350455871287888893172307515183924786911123755697753900951123306
 def commit(a, sL, b, sR, alpha, beta, gamma, tau_1, tau_2):
     A=add_points(vector_commit(G,a),vector_commit(H,b),multiply(B,alpha))
     S=add_points(vector_commit(G,sL),vector_commit(H,sR),multiply(B,beta))
-    V=add(multiply(G,a*b),multiply(B,gamma))
-    T1=add(multiply(G, add_points(vector_commit(a,sR),vector_commit(b,sL)) ),multiply(B,tau_1))
-    T2=add(multiply(G,vector_commit(sR,sL)),multiply(B,tau_2))
+
+    v=(np.inner(a,b))
+    V=add_points(multiply(G1,v),multiply(B,gamma))
+    T1=add_points(multiply(G1, (np.inner(a,sR)+np.inner(b,sL)) ),multiply(B,tau_1))
+    T2=add_points(multiply(G1,np.inner(sR,sL)),multiply(B,tau_2))
     return (A, S, V, T1, T2)
 
 
 def evaluate(f_0, f_1, f_2, u):
-    return (f_0 + f_1 * u + f_2 * u**2) % p
+    return (f_0 + f_1 * u + f_2 * u**2)%p
 
 def prove(blinding_0, blinding_1, blinding_2, u):
-    return (blinding_0 + blinding_1 * u + blinding_2 * u**2) % p
+    return (blinding_0 + blinding_1 * u + blinding_2 * u**2)%p
 
 ## step 0: Prover and verifier agree on G and B
 
@@ -55,8 +57,8 @@ a = np.array([89,15,90,22])
 b = np.array([16,18,54,12])
 sL = np.array([7,16,9,2])
 sR = np.array([8,15,10,23])
-t1 = np.mod(np.inner(a,sR) + np.inner(b,sL),p) # might cause overflow
-t2 = np.mod(np.inner(sR,sL),p)
+t1 = np.inner(a,sR) + np.inner(b,sL) # might cause overflow
+t2 = np.inner(sR,sL)
 
 ### blinding terms
 alpha = 20
