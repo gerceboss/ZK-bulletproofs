@@ -34,39 +34,41 @@ B = (FQ(128486065350455871287888893172307515183924786911123755697753900951123306
 
 # remember to do all arithmetic modulo p
 def commit(a, sL, b, sR, alpha, beta, gamma, tau_1, tau_2):
-    pass
-    # return (A, S, V, T1, T2)
+    A=add_points(vector_commit(G,a),vector_commit(H,b),multiply(B,alpha))
+    S=add_points(vector_commit(G,sL),vector_commit(H,sR),multiply(B,beta))
+    V=add(multiply(G,a*b),multiply(B,gamma))
+    T1=add(multiply(G, add_points(vector_commit(a,sR),vector_commit(b,sL)) ),multiply(B,tau_1))
+    T2=add(multiply(G,vector_commit(sR,sL)),multiply(B,tau_2))
+    return (A, S, V, T1, T2)
 
 
 def evaluate(f_0, f_1, f_2, u):
     return (f_0 + f_1 * u + f_2 * u**2) % p
 
 def prove(blinding_0, blinding_1, blinding_2, u):
-    # fill this in
-    # return pi
-    pass
+    return (blinding_0 + blinding_1 * u + blinding_2 * u**2) % p
 
 ## step 0: Prover and verifier agree on G and B
 
 ## step 1: Prover creates the commitments
 a = np.array([89,15,90,22])
 b = np.array([16,18,54,12])
-sL = ...
-sR = ...
-t1 = ...
-t2 = ...
+sL = np.array([7,16,9,2])
+sR = np.array([8,15,10,23])
+t1 = np.mod(np.inner(a,sR) + np.inner(b,sL),p) # might cause overflow
+t2 = np.mod(np.inner(sR,sL),p)
 
 ### blinding terms
-alpha = ...
-beta = ...
-gamma = ...
-tau_1 = ...
-tau_2 = ...
+alpha = 20
+beta = 23
+gamma = 61
+tau_1 = 173
+tau_2 = 960
 
 A, S, V, T1, T2 = commit(a, sL, b, sR, alpha, beta, gamma, tau_1, tau_2)
 
 ## step 2: Verifier picks u
-u = ...
+u = 7
 
 ## step 3: Prover evaluates l(u), r(u), t(u) and creates evaluation proofs
 l_u = evaluate(a, sL, 0, u)
